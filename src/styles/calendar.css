@@ -1,0 +1,225 @@
+/**
+ * Calendar section: month grid with status dots, legend and day detail.
+ * Status colors follow the game legend: 🟢 completed · ⚪ pending/future
+ * · ⚫ no record (past).
+ */
+
+/* ---------- Month header ---------- */
+.cal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.cal__month {
+  font-weight: 800;
+  font-size: var(--text-lg);
+  text-transform: capitalize;
+}
+
+/* ---------- Weekday labels ---------- */
+.cal__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-1);
+  margin-bottom: var(--space-1);
+}
+
+.cal__weekday {
+  text-align: center;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+/* ---------- Day grid ---------- */
+.cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-1);
+}
+
+.cal__cell {
+  position: relative;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.cal__cell:hover {
+  background: var(--surface-2);
+}
+
+.cal__cell:active {
+  transform: scale(0.92);
+}
+
+.cal__cell--empty {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Status treatments */
+.cal__cell--completed {
+  background: color-mix(in srgb, var(--success) 16%, transparent);
+  color: var(--success);
+  font-weight: 800;
+}
+
+.cal__cell--pending {
+  color: var(--text);
+  font-weight: 800;
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.cal__cell--future {
+  color: var(--text-faint);
+}
+
+.cal__cell--missed {
+  color: var(--text-faint);
+}
+
+/* Today gets an outer ring on top of its status */
+.cal__cell--today {
+  box-shadow:
+    inset 0 0 0 2px var(--accent),
+    0 0 0 2px var(--surface);
+}
+
+.cal__cell--today.cal__cell--completed {
+  box-shadow:
+    inset 0 0 0 2px var(--accent),
+    0 0 0 2px var(--surface);
+}
+
+/* Selected day */
+.cal__cell--selected {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+  box-shadow: var(--shadow-md);
+}
+
+/* Status dots (miniature legend inside each cell) */
+.cal__dot {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+}
+
+.cal__dot--completed {
+  background: var(--success);
+}
+
+.cal__dot--pending {
+  background: var(--accent-strong);
+}
+
+.cal__dot--future {
+  background: transparent;
+}
+
+.cal__dot--missed {
+  background: var(--text-faint);
+}
+
+/* ---------- Legend ---------- */
+.cal__legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.cal__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.cal__legend-dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: var(--radius-full);
+  background: var(--surface-2);
+}
+
+.cal__legend-dot--completed {
+  background: var(--success);
+}
+
+.cal__legend-dot--pending {
+  background: var(--accent-strong);
+}
+
+.cal__legend-dot--missed {
+  background: var(--text-faint);
+}
+
+/* ---------- Day detail ---------- */
+.cal-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.cal-detail__date {
+  font-size: var(--text-lg);
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.cal-detail__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.cal-detail__key {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.cal-detail__value {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.cal-detail__value--accent {
+  color: var(--accent-strong);
+}
+
+.cal-detail__note {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.cal-detail__today {
+  align-self: flex-start;
+}

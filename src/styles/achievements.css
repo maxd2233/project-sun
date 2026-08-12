@@ -1,0 +1,337 @@
+/**
+ * Achievements: catalogue cards, rarity treatment and the unlock overlay.
+ * Rarity colours come from `--ach-color` / `--ach-soft`, set per rarity
+ * class so adding a rarity is a one-line change.
+ */
+
+.ach-rarity--common {
+  --ach-color: #64748b;
+  --ach-soft: color-mix(in srgb, #64748b 16%, transparent);
+}
+
+.ach-rarity--uncommon {
+  --ach-color: #16a34a;
+  --ach-soft: color-mix(in srgb, #16a34a 16%, transparent);
+}
+
+.ach-rarity--rare {
+  --ach-color: #2563eb;
+  --ach-soft: color-mix(in srgb, #2563eb 16%, transparent);
+}
+
+.ach-rarity--epic {
+  --ach-color: #9333ea;
+  --ach-soft: color-mix(in srgb, #9333ea 18%, transparent);
+}
+
+.ach-rarity--legendary {
+  --ach-color: #f59e0b;
+  --ach-soft: color-mix(in srgb, #f59e0b 22%, transparent);
+}
+
+/* ---------- Page sections ---------- */
+.ach-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.ach-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+.ach-summary__ring {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-full);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  flex-shrink: 0;
+}
+
+.ach-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.ach-group__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.ach-group__title {
+  font-size: var(--text-sm);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text);
+}
+
+.ach-group__desc {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  margin-top: 0.15rem;
+}
+
+.ach-group__count {
+  flex-shrink: 0;
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--radius-full);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Grid ---------- */
+.achieve-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 720px) {
+  .achieve-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---------- Cards ---------- */
+.ach-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ach-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.ach-card__icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-md);
+}
+
+.ach-card--unlocked .ach-card__icon {
+  background: var(--ach-soft);
+  color: var(--ach-color);
+}
+
+.ach-card--locked .ach-card__icon {
+  background: var(--surface-2);
+  color: var(--text-faint);
+}
+
+.ach-card__check {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--success) 16%, transparent);
+  color: var(--success);
+  flex-shrink: 0;
+}
+
+.ach-card__lock {
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+
+.ach-card__rarity {
+  font-size: 0.625rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.ach-card--unlocked .ach-card__rarity {
+  color: var(--ach-color);
+}
+
+.ach-card--locked .ach-card__rarity {
+  color: var(--text-faint);
+}
+
+.ach-card__title {
+  font-weight: 800;
+  font-size: var(--text-sm);
+  line-height: 1.3;
+}
+
+.ach-card__desc {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  line-height: 1.45;
+}
+
+.ach-card__date {
+  margin-top: auto;
+  padding-top: var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--success);
+}
+
+.ach-card__req {
+  margin-top: auto;
+  padding-top: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  line-height: 1.45;
+  font-style: italic;
+}
+
+/* Locked state: dimmed, silhouette, no glow. */
+.ach-card--locked {
+  opacity: 0.62;
+}
+
+.ach-card--unlocked {
+  border-color: color-mix(in srgb, var(--ach-color) 34%, var(--border));
+}
+
+/* Legendary gets a soft glow so it stands out. */
+.ach-card--unlocked.ach-rarity--legendary {
+  box-shadow:
+    var(--shadow-sm),
+    0 0 22px color-mix(in srgb, var(--ach-color) 24%, transparent);
+}
+
+/* ---------- Unlock overlay ---------- */
+.ach-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+  background: var(--overlay);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.ach-overlay__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 22rem;
+  padding: var(--space-8) var(--space-6);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  cursor: default;
+}
+
+.ach-overlay__rarity {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--radius-full);
+  background: var(--ach-soft);
+  color: var(--ach-color);
+  font-size: var(--text-xs);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.ach-overlay__icon-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 8rem;
+  height: 8rem;
+}
+
+.ach-overlay__icon {
+  display: grid;
+  place-items: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: var(--radius-full);
+  background: var(--ach-soft);
+  color: var(--ach-color);
+  box-shadow: 0 0 30px color-mix(in srgb, var(--ach-color) 40%, transparent);
+}
+
+.ach-overlay__bursts {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.ach-overlay__burst-star {
+  position: absolute;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.ach-overlay__heading {
+  font-size: var(--text-xs);
+  font-weight: 900;
+  letter-spacing: 0.26em;
+  color: var(--accent-strong);
+}
+
+.ach-overlay__title {
+  font-size: var(--text-2xl);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.ach-overlay__desc {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  max-width: 20rem;
+}
+
+.ach-overlay__xp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.9rem;
+  border-radius: var(--radius-full);
+  background: var(--accent-soft);
+  color: var(--accent-contrast);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.ach-overlay__hint {
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}

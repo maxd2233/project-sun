@@ -1,0 +1,213 @@
+/**
+ * Hero sun: animated glow, rotating rays, organic particle drift and a
+ * celebration burst. All motion is CSS-driven so it never blocks input.
+ */
+.sun-hero {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(62vw, 280px);
+  aspect-ratio: 1;
+}
+
+.sun-hero__glow {
+  position: absolute;
+  inset: -20%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--sun-glow) 0%, transparent 62%);
+  filter: blur(10px);
+  animation: sun-glow-pulse 5s var(--ease-out) infinite alternate;
+  will-change: opacity;
+}
+
+.sun-hero__rays {
+  position: absolute;
+  inset: -6%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    var(--sun-color) 0deg 13deg,
+    transparent 13deg 27deg
+  );
+  -webkit-mask: radial-gradient(circle, transparent 32%, #000 34% 46%, transparent 48%);
+  mask: radial-gradient(circle, transparent 32%, #000 34% 46%, transparent 48%);
+  opacity: 0.55;
+  animation: sun-rotate 90s linear infinite;
+  will-change: transform;
+}
+
+.sun-hero__core {
+  position: relative;
+  width: 56%;
+  height: 56%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 34% 30%,
+    var(--sun-color-light) 0%,
+    var(--sun-color) 55%,
+    var(--sun-color-dark) 100%
+  );
+  box-shadow:
+    0 0 32px var(--sun-glow),
+    0 0 88px var(--sun-glow),
+    inset -12px -14px 36px rgba(0, 0, 0, 0.18);
+  z-index: 1;
+  will-change: transform, filter;
+}
+
+.sun-hero__shine {
+  position: absolute;
+  top: 16%;
+  left: 22%;
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  animation: shine-breathe 4.5s ease-in-out infinite;
+}
+
+.sun-hero__particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--sun-color);
+  opacity: 0.75;
+  animation: particle-float var(--float-duration, 5s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+  will-change: transform;
+}
+
+/* Celebration boost */
+.sun-hero--celebrating .sun-hero__core {
+  animation: sun-burst 1s var(--ease-out);
+}
+
+.sun-hero--celebrating .sun-hero__glow {
+  animation: sun-glow-burst 1.4s var(--ease-out);
+}
+
+.sun-hero__burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+@keyframes sun-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes sun-glow-pulse {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shine-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.14);
+    opacity: 0.55;
+  }
+}
+
+@keyframes particle-float {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(var(--float-x, 6px), var(--float-y, -8px));
+  }
+}
+
+@keyframes sun-burst {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  40% {
+    transform: scale(1.12);
+    filter: brightness(1.65);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes sun-glow-burst {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1.35;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Near the mission hour: the sun quietly leans in. */
+.sun-hero--near .sun-hero__core {
+  animation: sun-lean 3s var(--ease-out) infinite alternate;
+}
+
+.sun-hero--near .sun-hero__glow {
+  animation: near-glow-pulse 3s var(--ease-out) infinite alternate;
+}
+
+@keyframes sun-lean {
+  from {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  to {
+    transform: scale(1.045);
+    filter: brightness(1.14);
+  }
+}
+
+@keyframes near-glow-pulse {
+  from {
+    opacity: 0.75;
+    filter: brightness(1);
+  }
+  to {
+    opacity: 1;
+    filter: brightness(1.25);
+  }
+}
+
+/* Reduced motion: keep a static, calmer sun */
+@media (prefers-reduced-motion: reduce) {
+  .sun-hero__rays {
+    animation: none;
+  }
+  .sun-hero__shine,
+  .sun-hero__particle,
+  .sun-hero--near .sun-hero__core,
+  .sun-hero--near .sun-hero__glow {
+    animation: none;
+  }
+  .sun-hero--celebrating .sun-hero__core {
+    animation: none;
+  }
+  .sun-hero--celebrating .sun-hero__glow {
+    animation: none;
+  }
+}

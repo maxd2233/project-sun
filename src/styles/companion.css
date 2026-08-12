@@ -1,0 +1,240 @@
+/**
+ * Solín the companion: palette, bubble, aura, orbiting sparkles, bursts
+ * and the stats-page panel. Day/night palettes live here as CSS custom
+ * properties consumed by the SVG artwork (see features/companion/visual.tsx).
+ */
+
+/* ---------- Palette (day) ---------- */
+.companion {
+  --solin-core-light: #ffe7a3;
+  --solin-core: #fbbf24;
+  --solin-core-dark: #d97706;
+  --solin-face: #7c2d12;
+  --solin-blush: #fb7185;
+  --solin-crown: #fcd34d;
+  --solin-crown-dark: #b45309;
+  --solin-cap: #818cf8;
+  --solin-star: #fbbf24;
+  --solin-aura: rgba(251, 191, 36, 0.55);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ---------- Palette (night) ---------- */
+.companion--night {
+  --solin-core-light: #e0e7ff;
+  --solin-core: #a5b4fc;
+  --solin-core-dark: #6366f1;
+  --solin-face: #312e81;
+  --solin-blush: #f0abfc;
+  --solin-crown: #fcd34d;
+  --solin-crown-dark: #4c1d95;
+  --solin-cap: #818cf8;
+  --solin-star: #fef08a;
+  --solin-aura: rgba(129, 140, 248, 0.5);
+}
+
+/* ---------- Scene + stage ---------- */
+.companion__scene {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.companion__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+}
+
+.companion__float,
+.companion__breathe {
+  display: grid;
+  place-items: center;
+}
+
+.companion__art {
+  width: calc(150px * var(--solin-scale, 1));
+  height: calc(150px * var(--solin-scale, 1));
+}
+
+.companion__art svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Home stage variant: Solín is the main character, so he's bigger here. */
+.companion--home .companion__art {
+  width: calc(170px * var(--solin-scale, 1));
+  height: calc(170px * var(--solin-scale, 1));
+}
+
+.companion--home .companion__bubble {
+  max-width: 19rem;
+}
+
+/* ---------- Aura ---------- */
+.companion__aura {
+  position: absolute;
+  inset: -16%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.companion__aura--glow {
+  background: radial-gradient(circle, var(--solin-aura) 0%, transparent 60%);
+}
+
+.companion__aura--ring {
+  background: radial-gradient(
+    circle,
+    transparent 46%,
+    var(--solin-aura) 56% 63%,
+    transparent 68%
+  );
+}
+
+.companion__aura--legend {
+  background: conic-gradient(from 0deg, #fbbf24, #fb7185, #a78bfa, #38bdf8, #fbbf24);
+  -webkit-mask: radial-gradient(circle, transparent 44%, #000 55% 63%, transparent 68%);
+  mask: radial-gradient(circle, transparent 44%, #000 55% 63%, transparent 68%);
+  animation: companion-aura-spin 24s linear infinite;
+  filter: saturate(1.2);
+}
+
+@keyframes companion-aura-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Orbiting sparkles ---------- */
+.companion__orbit {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.companion__orbit-ring {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.companion__orbit-spark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-size: 14px;
+  color: var(--solin-core-dark);
+  opacity: 0.9;
+  line-height: 1;
+}
+
+/* ---------- Bursts ---------- */
+.companion__bursts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.companion__burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  line-height: 1;
+}
+
+.companion__burst--star {
+  color: var(--solin-crown);
+  font-weight: 800;
+}
+
+.companion__burst--heart {
+  color: var(--solin-blush);
+  font-weight: 800;
+}
+
+/* ---------- Speech bubble ---------- */
+.companion__bubble {
+  position: relative;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-3);
+  max-width: 17rem;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.companion__bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background: var(--surface-2);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.companion__bubble-text {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text);
+  min-height: 1.5em;
+  display: grid;
+  place-items: center;
+}
+
+/* ---------- Stats-page panel ---------- */
+.companion-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.companion-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.companion-panel__body {
+  display: grid;
+  place-items: center;
+  padding: var(--space-2) 0;
+}
+
+.companion-panel__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.companion-panel__progress {
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.companion-panel__progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  transition: width 0.6s var(--ease-out);
+}

@@ -1,0 +1,163 @@
+/**
+ * Statistics section: big-number cards, completion ring, monthly bar
+ * chart (pure CSS, no chart library) and the average registration time.
+ */
+
+/* ---------- Layout ---------- */
+.stats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+@media (min-width: 720px) {
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: stretch;
+  }
+}
+
+/* ---------- Completion ring ---------- */
+.stats-ring {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.stats-ring__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.stats-ring__value {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-ring__sub {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ---------- Month summary ---------- */
+.stats-month {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.stats-month__count {
+  font-size: var(--text-3xl);
+  font-weight: 800;
+  color: var(--accent-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-month__label {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+/* ---------- Monthly bar chart ---------- */
+.chart {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-2);
+  height: 9.5rem;
+}
+
+.chart__col {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-1);
+  height: 100%;
+  min-width: 0;
+}
+
+.chart__count {
+  font-size: var(--text-xs);
+  font-weight: 800;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.chart__bar-wrap {
+  display: flex;
+  align-items: flex-end;
+}
+
+.chart__bar {
+  width: 100%;
+  max-width: 2.25rem;
+  margin-inline: auto;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+  min-height: 3px;
+}
+
+.chart__bar--current {
+  background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.chart__label {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.chart__caption {
+  margin-top: var(--space-3);
+  font-size: var(--text-xs);
+  text-align: center;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ---------- Average registration time ---------- */
+.stats-time {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.stats-time__icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-lg);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  flex-shrink: 0;
+}
+
+.stats-time__value {
+  display: block;
+  font-size: var(--text-3xl);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.stats-time__label {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}

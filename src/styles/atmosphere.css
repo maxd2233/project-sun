@@ -1,0 +1,158 @@
+/**
+ * The full-bleed sky that lives behind the Home experience.
+ * Every effect is pure CSS; nothing here blocks input or scroll.
+ */
+
+.atmo {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.atmo__sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    var(--atmo-top) 0%,
+    var(--atmo-mid) 52%,
+    var(--atmo-bottom) 100%
+  );
+  transition: background 0.9s linear;
+}
+
+/* Gentle horizon breathing so the sky never feels static. */
+.atmo__haze {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 108%,
+    var(--atmo-warm) 0%,
+    transparent 58%
+  );
+  animation: atmo-haze 7s var(--ease-out) infinite alternate;
+}
+
+@keyframes atmo-haze {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 0.95;
+  }
+}
+
+/* ---------- Night stars ---------- */
+.atmo__star {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--atmo-star, #fef7d8);
+  opacity: 0.85;
+  animation: atmo-twinkle var(--twinkle-duration, 3s) ease-in-out infinite;
+  animation-delay: var(--twinkle-delay, 0s);
+}
+
+@keyframes atmo-twinkle {
+  0%,
+  100% {
+    opacity: 0.18;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* ---------- Day motes (few, soft, drifting) ---------- */
+.atmo__mote {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 244, 214, 0.9) 0%,
+    rgba(255, 230, 170, 0) 70%
+  );
+  opacity: 0.5;
+  animation: atmo-mote var(--mote-duration, 12s) ease-in-out infinite;
+  animation-delay: var(--mote-delay, 0s);
+  will-change: transform;
+}
+
+@keyframes atmo-mote {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(var(--mote-dx, 18px), -14px);
+  }
+}
+
+/* ---------- Ground vignette anchors the scene below ---------- */
+.atmo__ground {
+  position: absolute;
+  inset: 62% 0 0 0;
+  background: linear-gradient(
+    180deg,
+    rgba(40, 30, 10, 0) 0%,
+    rgba(60, 42, 18, 0.16) 100%
+  );
+}
+
+/* ---------- Near the mission hour: the sky warms up ---------- */
+.atmo--warming .atmo__haze {
+  animation: atmo-warming 2.6s ease-in-out infinite;
+}
+
+@keyframes atmo-warming {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ---------- Completion flash ---------- */
+.atmo__flash {
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(255, 236, 170, 0.95) 0%,
+    rgba(255, 210, 120, 0.45) 32%,
+    transparent 62%
+  );
+  animation: atmo-flash 1.5s var(--ease-out) forwards;
+  will-change: opacity, transform;
+}
+
+@keyframes atmo-flash {
+  0% {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atmo__haze,
+  .atmo__star,
+  .atmo__mote {
+    animation: none;
+  }
+  .atmo__flash {
+    animation: none;
+    opacity: 0;
+  }
+}
