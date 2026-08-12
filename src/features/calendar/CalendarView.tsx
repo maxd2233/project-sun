@@ -13,6 +13,7 @@ import {
   toDateKey,
 } from '../../lib/date';
 import { completedCount } from '../../services/stats';
+import { getDayNumberForDate } from '../../services/days';
 import { usePrefersReducedMotion } from '../../hooks/useMediaQuery';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -54,6 +55,11 @@ export function CalendarView() {
   const [monthKey, setMonthKey] = useState(() => monthStartKey(today));
   const [selectedKey, setSelectedKey] = useState<DateKey | null>(today);
 
+  // Single source of truth: the same day-number rule as the Home, applied to
+  // each calendar date at its mission boundary.
+  const treatmentStart = state.progress.startDate;
+  const scheduledTime = state.mission.scheduledTime;
+
   const cells: Array<DateKey | null> = [];
   for (let i = 0; i < firstWeekdayOfMonth(monthKey); i += 1) cells.push(null);
   for (let day = 1; day <= daysInMonth(monthKey); day += 1) {
@@ -75,6 +81,10 @@ export function CalendarView() {
   const status: DayStatus | null = selectedKey
     ? dayStatus(selectedKey, today, record?.completed === true)
     : null;
+  const selectedDayNumber =
+    selectedKey !== null
+      ? getDayNumberForDate(treatmentStart, scheduledTime, selectedKey)
+      : null;
 
   const dayBonusXp = selectedKey
     ? Object.values(state.progress.achievementUnlocks)
@@ -127,6 +137,7 @@ export function CalendarView() {
               const statusClass = `cal__cell--${dayStatus(key, today, isCompleted)}`;
               const isToday = key === today;
               const isSelected = key === selectedKey;
+              const dayNumber = getDayNumberForDate(treatmentStart, scheduledTime, key);
               return (
                 <button
                   key={key}
@@ -140,10 +151,15 @@ export function CalendarView() {
                     .filter(Boolean)
                     .join(' ')}
                   aria-pressed={isSelected}
-                  aria-label={`${formatDateLongYear(key)}${isCompleted ? ', completado' : ''}${isToday ? ', hoy' : ''}`}
+                  aria-label={`${formatDateLongYear(key)}${dayNumber !== null ? `, día ${dayNumber} del tratamiento` : ''}${isCompleted ? ', completado' : ''}${isToday ? ', hoy' : ''}`}
                   onClick={() => setSelectedKey(key)}
                 >
-                  {Number(key.slice(8))}
+                  <span className="cal__cell__group">
+                    <span className="cal__cell__label" aria-hidden="true">
+                      {dayNumber !== null ? 'Día' : ''}
+                    </span>
+                    <span className="cal__cell__num">{dayNumber ?? ''}</span>
+                  </span>
                   <span className={`cal__dot ${STATUS_META[dayStatus(key, today, isCompleted)].dotClass}`} aria-hidden="true" />
                 </button>
               );
@@ -172,6 +188,15 @@ export function CalendarView() {
           transition={{ duration: 0.25, ease: 'easeOut' }}
         >
           <p className="cal-detail__date">{formatDateLongYear(selectedKey)}</p>
+
+          {selectedDayNumber !== null && (
+            <div className="cal-detail__row">
+              <span className="cal-detail__key">Día del tratamiento</span>
+              <span className="cal-detail__value cal-detail__value--accent">
+                Día {selectedDayNumber}
+              </span>
+            </div>
+          )}
 
           <div className="cal-detail__row">
             <span className="cal-detail__key">Estado</span>

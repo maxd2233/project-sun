@@ -245,6 +245,14 @@
   color: var(--text-muted);
 }
 
+.mission-hero__day {
+  font-size: var(--text-sm);
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  color: var(--accent-strong);
+  white-space: nowrap;
+}
+
 .mission-hero__clock {
   display: inline-flex;
   align-items: center;

@@ -7,7 +7,7 @@ import type {
 } from '../types';
 import { STORAGE_KEYS, loadJSON, saveJSON } from '../lib/storage';
 import { createId } from '../lib/ids';
-import { shiftDateKey, toDateKey } from '../lib/date';
+import { fromDateKey, shiftDateKey, toDateKey } from '../lib/date';
 import { bestStreak, currentStreak, totalCompleted, totalXp } from './streaks';
 import { evaluateNewAchievements } from './achievements';
 import { getAchievement } from '../config/achievements';
@@ -104,6 +104,9 @@ export function recomputeProgress(
     xp: totalXp(records) + previous.bonusXp,
     achievementUnlocks: unlocks,
     bonusXp: previous.bonusXp,
+    // startDate is set on first use and must never be recomputed or reset:
+    // records and streaks are re-derived, but the treatment start stays.
+    startDate: previous.startDate,
   };
 
   const newlyEarned = evaluateNewAchievements({
@@ -173,10 +176,34 @@ function normalizeProgress(
     ...DEFAULT_PROGRESS,
     achievementUnlocks: unlocks,
     bonusXp: Object.values(unlocks).reduce((sum, entry) => sum + entry.xpEarned, 0),
-    startDate: raw?.startDate,
+    startDate: deriveStartDate(raw?.startDate, records),
   };
 
   return recomputeProgress(records, previous, context);
+}
+
+/**
+ * Resolve the treatment start date:
+ * 1. a stored, valid `startDate` wins (never recalculated to "today");
+ * 2. otherwise the earliest recorded day is the real start of the
+ *    treatment;
+ * 3. otherwise default to yesterday (the app begins with Day 1 = yesterday,
+ *    ready for Day 2 today).
+ */
+function deriveStartDate(
+  rawStart: unknown,
+  records: Record<DateKey, DailyRecord>,
+): DateKey {
+  if (
+    typeof rawStart === 'string' &&
+    /^\d{4}-\d{2}-\d{2}$/.test(rawStart) &&
+    toDateKey(fromDateKey(rawStart)) === rawStart
+  ) {
+    return rawStart;
+  }
+  const earliest = Object.keys(records ?? {}).sort()[0];
+  if (earliest) return earliest;
+  return shiftDateKey(toDateKey(), -1);
 }
 
 /** Normalize data read from storage: migrate versions and fill gaps. */

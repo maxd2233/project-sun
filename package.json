@@ -11,8 +11,9 @@
     "typecheck": "tsc -b --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "npm run test:achievements && npm run test:temporal",
+    "test": "npm run test:achievements && npm run test:days && npm run test:temporal",
     "test:achievements": "node -e \"require('fs').mkdirSync('node_modules/.cache',{recursive:true})\" && esbuild scripts/achievements-sanity.test.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/achievements-sanity.test.mjs --log-level=warning && node node_modules/.cache/achievements-sanity.test.mjs",
+    "test:days": "node -e \"require('fs').mkdirSync('node_modules/.cache',{recursive:true})\" && esbuild scripts/days-sanity.test.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/days-sanity.test.mjs --log-level=warning && node node_modules/.cache/days-sanity.test.mjs",
     "test:temporal": "node -e \"require('fs').mkdirSync('node_modules/.cache',{recursive:true})\" && esbuild scripts/temporal-sanity.test.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/temporal-sanity.test.mjs --log-level=warning && node node_modules/.cache/temporal-sanity.test.mjs"
   },
   "dependencies": {

@@ -112,7 +112,7 @@ function validateState(value: unknown): asserts value is Partial<AppState> {
   }
 
   if (!isRecord(value.progress)) fail('El progreso no es válido.');
-  onlyKeys(value.progress, ['currentStreak', 'bestStreak', 'totalCompleted', 'totalDays', 'xp', 'achievementUnlocks', 'bonusXp', 'unlockedAchievements'], 'El progreso');
+  onlyKeys(value.progress, ['currentStreak', 'bestStreak', 'totalCompleted', 'totalDays', 'xp', 'achievementUnlocks', 'bonusXp', 'unlockedAchievements', 'startDate'], 'El progreso');
   for (const key of ['currentStreak', 'bestStreak', 'totalCompleted', 'totalDays', 'xp', 'bonusXp']) {
     finiteNonNegative(value.progress[key], `El campo de progreso ${key}`, true);
   }

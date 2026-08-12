@@ -8,6 +8,7 @@ import {
   getMissionState,
   isNearMissionTime,
 } from '../../services/mission';
+import { getCurrentDayNumber } from '../../services/days';
 import { isCompleted } from '../../services/records';
 import { useNow } from '../../hooks/useNow';
 import { usePrefersReducedMotion } from '../../hooks/useMediaQuery';
@@ -57,6 +58,14 @@ export function MissionHero({ celebrating, onCelebratingChange }: MissionHeroPro
   const near = isNearMissionTime(mission, now, isTodayCompleted);
   const countdownMs = msUntil(mission.scheduledTime, now);
 
+  // Día del tratamiento: avanzado por el reloj (desde startDate), nunca por
+  // la racha ni por las misiones completadas. Se muestra junto a la misión.
+  const dayNumber = getCurrentDayNumber(
+    state.progress.startDate,
+    mission.scheduledTime,
+    now,
+  );
+
   useEffect(
     () => () => {
       if (timerRef.current !== null) window.clearTimeout(timerRef.current);
@@ -105,6 +114,9 @@ export function MissionHero({ celebrating, onCelebratingChange }: MissionHeroPro
       transition={{ type: 'spring', stiffness: 280, damping: 16 }}
     >
       <div className="mission-hero__head">
+        <span className="mission-hero__day" aria-label={`Día ${dayNumber} del tratamiento`}>
+          DÍA {dayNumber}
+        </span>
         <span className="mission-hero__tag">{mission.title}</span>
         <span className="mission-hero__clock" aria-label={`Hora programada: ${mission.scheduledTime}`}>
           <Clock size={15} aria-hidden="true" />
@@ -121,7 +133,7 @@ export function MissionHero({ celebrating, onCelebratingChange }: MissionHeroPro
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
           >
-            DÍA {streak} COMPLETADO
+            DÍA {dayNumber} COMPLETADO
           </motion.p>
           <MissionCelebration
             xpEarned={todayRecord?.xpEarned ?? 0}

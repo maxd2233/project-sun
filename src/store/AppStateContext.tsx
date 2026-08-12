@@ -3,7 +3,7 @@ import { appReducer } from './reducer';
 import { loadState, saveState } from '../services/persistence';
 import { STORAGE_KEYS } from '../lib/storage';
 import { isCompleted } from '../services/records';
-import { useTodayKey } from '../hooks/useNow';
+import { useCurrentDayNumber, useTodayKey } from '../hooks/useNow';
 import { AppStateContext } from './context';
 import { buildSeededState, parseSeedParam } from '../lib/seed';
 
@@ -31,6 +31,15 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const todayRecord = state.records[todayKey];
   const isTodayCompleted = isCompleted(todayRecord);
 
+  // The treatment day number follows the mission-time boundary (not
+  // midnight), derived from the persisted startDate. It advances on its
+  // own with the clock, never when the mission is completed.
+  const dayNumber = useCurrentDayNumber(
+    state.progress.startDate,
+    state.mission.scheduledTime,
+    60_000,
+  );
+
   useEffect(() => {
     saveState(state);
   }, [state]);
@@ -57,6 +66,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         todayKey,
         todayRecord,
         isTodayCompleted,
+        dayNumber,
       }}
     >
       {children}

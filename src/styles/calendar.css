@@ -112,6 +112,26 @@
   box-shadow: var(--shadow-md);
 }
 
+/* Day-of-treatment label inside each cell ("Día N"). */
+.cal__cell__group {
+  display: grid;
+  place-items: center;
+  line-height: 1;
+}
+
+.cal__cell__label {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 3px;
+}
+
+.cal__cell__num {
+  font-variant-numeric: tabular-nums;
+}
+
 /* Status dots (miniature legend inside each cell) */
 .cal__dot {
   position: absolute;

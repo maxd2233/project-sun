@@ -8,6 +8,8 @@ export interface AppStateContextValue {
   todayKey: DateKey;
   todayRecord: DailyRecord | undefined;
   isTodayCompleted: boolean;
+  /** Treatment day number (getCurrentDayNumber) — independent of the streak. */
+  dayNumber: number;
 }
 
 export const AppStateContext = createContext<AppStateContextValue | null>(null);

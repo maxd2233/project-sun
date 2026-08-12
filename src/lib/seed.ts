@@ -40,10 +40,15 @@ export function buildSeededState(seedDays: number, base: Date = new Date()): App
     };
   }
 
-  const progress = recomputeProgress(records, { ...DEFAULT_PROGRESS }, {
-    mission: state.mission,
-    events: state.events,
-  });
+  // The seeded run started `seedDays` days ago, so today is Day `seedDays + 1`.
+  const progress = recomputeProgress(
+    records,
+    { ...DEFAULT_PROGRESS, startDate: shiftDateKey(today, -seedDays) },
+    {
+      mission: state.mission,
+      events: state.events,
+    },
+  );
 
   return { ...state, records, progress };
 }

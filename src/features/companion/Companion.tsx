@@ -78,7 +78,7 @@ export function Companion({
   className = '',
   label,
 }: CompanionProps) {
-  const { state, isTodayCompleted, dispatch } = useAppState();
+  const { state, isTodayCompleted, dayNumber, dispatch } = useAppState();
   const now = useNow(30_000);
   const reduceMotion = usePrefersReducedMotion();
 
@@ -184,9 +184,12 @@ export function Companion({
       return;
     }
     if (becameCompleted) {
+      // Solín separates DÍA DEL TRATAMIENTO (dayNumber) from RACHA
+      // (currentStreak): the day-2 milestone line uses the day counter, the
+      // rest of the encouragement reacts to the streak growing.
       const streakNow = state.progress.currentStreak;
       const reaction =
-        streakNow === 2 ? 'streaktwo' : streakGrew && streakNow > 1 ? 'streak' : 'celebrating';
+        dayNumber === 2 ? 'streaktwo' : streakGrew && streakNow > 1 ? 'streak' : 'celebrating';
       startTransient('celebrating', reaction, TRANSIENT_HOLD_MS);
       fireBurst('celebrate');
       setJumpKey((k) => k + 1);
@@ -198,6 +201,7 @@ export function Companion({
     }
   }, [
     isTodayCompleted,
+    dayNumber,
     state.progress.currentStreak,
     state.progress.achievementUnlocks,
     stageInfo.stage.id,
