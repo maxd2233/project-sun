@@ -84,13 +84,13 @@ export function recomputeProgress(
 ): UserProgress {
   const unlocks = { ...previous.achievementUnlocks };
   const totalDays = records?.length ? Object.keys(records).length : previous.totalDays;
-  const totalCompleted = records?.length ? totalCompleted(records) : previous.totalCompleted;
-  const currentStreak = records?.length ? currentStreak(records) : previous.currentStreak;
-  const bestStreak = records?.length ? bestStreak(records) : previous.bestStreak;
+  const computedTotalCompleted = records?.length ? totalCompleted(records) : previous.totalCompleted;
+  const computedCurrentStreak = records?.length ? currentStreak(records) : previous.currentStreak;
+  const computedBestStreak = records?.length ? bestStreak(records) : previous.bestStreak;
   const base: UserProgress = {
-    currentStreak,
-    bestStreak,
-    totalCompleted,
+    currentStreak: computedCurrentStreak,
+    bestStreak: computedBestStreak,
+    totalCompleted: computedTotalCompleted,
     totalDays,
     xp: totalXp(records) + previous.bonusXp,
     achievementUnlocks: unlocks,
