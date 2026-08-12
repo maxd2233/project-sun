@@ -7,7 +7,7 @@ import type {
 } from '../types';
 import { STORAGE_KEYS, loadJSON, saveJSON } from '../lib/storage';
 import { createId } from '../lib/ids';
-import { toDateKey } from '../lib/date';
+import { shiftDateKey, toDateKey } from '../lib/date';
 import { bestStreak, currentStreak, totalCompleted, totalXp } from './streaks';
 import { evaluateNewAchievements } from './achievements';
 import { getAchievement } from '../config/achievements';
@@ -46,12 +46,13 @@ export const DEFAULT_COMPANION: AppState['companion'] = {
 };
 
 export function createDefaultState(): AppState {
+  const yesterday = shiftDateKey(toDateKey(), -1);
   return {
     version: STATE_VERSION,
     mission: { ...DEFAULT_MISSION, id: createId('mission') },
     records: {
-      [toDateKey()]: {
-        date: toDateKey(),
+      [yesterday]: {
+        date: yesterday,
         completed: true,
         completedAt: new Date().toISOString(),
         xpEarned: 0,
