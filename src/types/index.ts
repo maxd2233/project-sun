@@ -59,6 +59,10 @@ export interface UserProgress {
   achievementUnlocks: Record<string, AchievementUnlock>;
   /** XP earned from achievements, kept separate so it can't drift. */
   bonusXp: number;
+  /** DateKey of the app's "first day" — used to compute which day number
+   *  the app is currently on. startDate = yesterday means: yesterday = Day 1,
+   *  today = Day 2, tomorrow = Day 3, etc. Persisted across sessions. */
+  startDate?: DateKey;
 }
 
 /** Appearance preference. `system` follows the OS setting. */

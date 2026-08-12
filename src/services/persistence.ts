@@ -47,6 +47,7 @@ export const DEFAULT_COMPANION: AppState['companion'] = {
 
 export function createDefaultState(): AppState {
   const yesterday = shiftDateKey(toDateKey(), -1);
+  const startDate = yesterday;
   return {
     version: STATE_VERSION,
     mission: { ...DEFAULT_MISSION, id: createId('mission') },
@@ -58,7 +59,10 @@ export function createDefaultState(): AppState {
         xpEarned: 0,
       },
     },
-    progress: { ...DEFAULT_PROGRESS },
+    progress: { 
+      ...DEFAULT_PROGRESS,
+      startDate 
+    },
     settings: { ...DEFAULT_SETTINGS },
     companion: { ...DEFAULT_COMPANION },
     events: { ...DEFAULT_EVENTS },
@@ -165,6 +169,7 @@ function normalizeProgress(
     ...DEFAULT_PROGRESS,
     achievementUnlocks: unlocks,
     bonusXp: Object.values(unlocks).reduce((sum, entry) => sum + entry.xpEarned, 0),
+    startDate: raw?.startDate,
   };
 
   return recomputeProgress(records, previous, context);
