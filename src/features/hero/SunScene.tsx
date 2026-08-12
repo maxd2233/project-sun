@@ -36,6 +36,7 @@ export function SunScene({ celebrating, near }: SunSceneProps) {
   const reduceMotion = usePrefersReducedMotion();
   const [note, setNote] = useState<string | null>(null);
   const [token, setToken] = useState(0);
+  const [kickKey, setKickKey] = useState(0);
 
   const holdTimer = useRef<number | null>(null);
   const noteTimer = useRef<number | null>(null);
@@ -66,6 +67,7 @@ export function SunScene({ celebrating, near }: SunSceneProps) {
 
   const handlePointerDown = useCallback(() => {
     if (reduceMotion) return;
+    setKickKey((k) => k + 1);
     heldRef.current = false;
     clearHold();
     holdTimer.current = window.setTimeout(() => {
@@ -96,7 +98,7 @@ export function SunScene({ celebrating, near }: SunSceneProps) {
       whileTap={!reduceMotion ? { scale: 0.96 } : undefined}
       transition={{ type: 'spring', stiffness: 320, damping: 17 }}
     >
-      <SunHero celebrating={celebrating} near={near} />
+      <SunHero celebrating={celebrating} near={near} kickKey={kickKey} />
 
       <AnimatePresence>
         {note && (

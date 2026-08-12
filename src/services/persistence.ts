@@ -88,10 +88,14 @@ export function recomputeProgress(
   context: ProgressContext,
 ): UserProgress {
   const unlocks = { ...previous.achievementUnlocks };
-  const totalDays = records?.length ? Object.keys(records).length : previous.totalDays;
-  const computedTotalCompleted = records?.length ? totalCompleted(records) : previous.totalCompleted;
-  const computedCurrentStreak = records?.length ? currentStreak(records) : previous.currentStreak;
-  const computedBestStreak = records?.length ? bestStreak(records) : previous.bestStreak;
+  // Records are a plain object (never an array), so recompute from them
+  // directly: they are the single source of truth for streaks, totals and
+  // XP. Empty records simply mean nothing has been completed yet.
+  const dayKeys = Object.keys(records ?? {});
+  const totalDays = dayKeys.length;
+  const computedTotalCompleted = totalCompleted(records);
+  const computedCurrentStreak = currentStreak(records);
+  const computedBestStreak = bestStreak(records);
   const base: UserProgress = {
     currentStreak: computedCurrentStreak,
     bestStreak: computedBestStreak,

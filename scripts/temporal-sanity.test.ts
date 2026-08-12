@@ -268,7 +268,11 @@ check('the reducer refuses duplicate completions (same state, first timestamp wi
   const first = appReducer(base, action);
   const duplicate = appReducer(first, action);
   assert.equal(first, duplicate, 'duplicate dispatch returns the same state reference');
-  assert.equal(Object.keys(duplicate.records).length, 1);
+  // The default state already seeds a "day 1" record (yesterday); today adds one more.
+  assert.equal(
+    Object.keys(duplicate.records).length,
+    Object.keys(base.records).length + 1,
+  );
   assert.equal(duplicate.records['2026-08-12'].completedAt, '2026-08-12T14:00:00.000Z');
 
   const replayed = appReducer(first, {
